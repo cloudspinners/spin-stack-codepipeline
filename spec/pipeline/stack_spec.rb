@@ -3,7 +3,7 @@ RSpec.describe 'Cloudspin::Stack::Definition' do
 
   before(:all) do
 
-    stack_definition = Cloudspin::Stack::Definition.from_file(terraform_source_folder + '/stack.yaml')
+    stack_definition = Cloudspin::Stack::Definition.from_file(terraform_source_folder + '/stack-definition.yaml')
 
     instance = Cloudspin::Stack::Instance.new(
       stack_name: 'spec',
