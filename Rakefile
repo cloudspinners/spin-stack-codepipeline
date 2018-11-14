@@ -8,20 +8,14 @@ CLEAN.include('build')
 CLEAN.include('dist')
 CLOBBER.include('state')
 
+include Cloudspin::Stack::Rake
+
+stack = StackTask.new.instance
+InspecTask.new(stack_instance: stack)
 RSpec::Core::RakeTask.new(:spec)
-task :default => :spec
 
-namespace :stack do
-  namespace 'codepipeline' do
-    stack = Cloudspin::Stack::Rake::StackTask.new(id: 'codepipeline').instance
-
-    Cloudspin::Stack::Rake::InspecTask.new(stack_instance: stack,
-                                           inspec_target: 'aws://eu-west-1/assume-spin_stack_manager-skeleton')
-
-    Cloudspin::Stack::Rake::ArtefactTask.new(definition_folder: './src',
-                                             dist_folder: './dist')
-  end
-end
+ArtefactTask.new(definition_folder: './src',
+                 dist_folder: './dist')
 
 desc 'Create, test, and destroy the stack'
 task :test => [

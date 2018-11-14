@@ -35,7 +35,7 @@ resource "aws_codepipeline" "pipeline" {
   }
 
   stage {
-    name = "PackageArtefact"
+    name = "Build"
 
     action {
       name            = "Package"
@@ -48,16 +48,16 @@ resource "aws_codepipeline" "pipeline" {
       output_artifacts  = [ "stack-package" ]
 
       configuration {
-        ProjectName = "${aws_codebuild_project.packaging-project.name}"
+        ProjectName = "${aws_codebuild_project.build-stage.name}"
       }
     }
   }
 
   stage {
-    name = "ApplyToTestEnvironment"
+    name = "EphemeralTest"
 
     action {
-      name            = "ApplyToTestEnvironment"
+      name            = "EphemeralTest"
       category        = "Build"
       owner           = "AWS"
       provider        = "CodeBuild"
@@ -67,16 +67,16 @@ resource "aws_codepipeline" "pipeline" {
       output_artifacts  = [ "testapply-results" ]
 
       configuration {
-        ProjectName = "${aws_codebuild_project.testapply-project.name}"
+        ProjectName = "${aws_codebuild_project.emphemeral-test-stage.name}"
       }
     }
   }
 
   stage {
-    name = "ApproveForProduction"
+    name = "ApproveForRelease"
 
     action {
-      name            = "ApproveForProduction"
+      name            = "ApproveForRelease"
       category        = "Approval"
       provider        = "Manual"
       owner           = "AWS"
@@ -85,20 +85,20 @@ resource "aws_codepipeline" "pipeline" {
   }
 
   stage {
-    name = "ApplyToProdEnvironment"
+    name = "Release"
 
     action {
-      name            = "ApplyToProdEnvironment"
+      name            = "Release"
       category        = "Build"
       owner           = "AWS"
       provider        = "CodeBuild"
       version         = "1"
 
       input_artifacts = [ "stack-package" ]
-      output_artifacts  = [ "prodapply-results" ]
+      output_artifacts  = [ "release-results" ]
 
       configuration {
-        ProjectName = "${aws_codebuild_project.prodapply-project.name}"
+        ProjectName = "${aws_codebuild_project.apply-stage.name}"
       }
     }
   }

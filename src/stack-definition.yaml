@@ -1,17 +1,4 @@
 ---
 stack:
-  name: pipeline
+  name: spin-stack-codepipeline
   version: 0.0.1
-
-parameter_names:
-- stack_name
-- github_owner
-- github_repo
-- github_branch
-- github_oath_token
-- repo_bucket_name
-
-resource_names:
-- aws_profile
-- assume_role_arn
-- region

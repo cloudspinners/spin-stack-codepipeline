@@ -1,9 +1,9 @@
 
-resource "aws_codebuild_project" "packaging-project" {
+resource "aws_codebuild_project" "build-stage" {
   name          = "Package-${var.stack_name}"
-  description   = "CodeBuild project to package the ${var.stack_name} codebase"
+  description   = "CodeBuild project to build the ${var.stack_name} codebase"
   build_timeout = "5"
-  service_role  = "${aws_iam_role.packaging_codebuild_role.arn}"
+  service_role  = "${aws_iam_role.build_role.arn}"
 
   environment {
     compute_type = "BUILD_GENERAL1_SMALL"
@@ -18,7 +18,7 @@ resource "aws_codebuild_project" "packaging-project" {
 
   source {
     type = "CODEPIPELINE"
-    buildspec = "buildspec_package.yml"
+    buildspec = "pipeline/build_stage_buildspec.yml"
   }
 
   artifacts {

@@ -1,0 +1,9 @@
+---
+# By default, this creates a pipeline that tests the pipeline code itself.
+# Override these in stack-instance-local.yaml to create a pipeline for a different stack definition.
+parameters:
+  stack_name: spin-stack-codepipeline
+  github_owner: cloudspinners
+  github_repo: spin-stack-codepipeline
+  github_branch: master
+  repo_bucket_name: _OVERRIDE_THIS_

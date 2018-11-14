@@ -1,6 +1,6 @@
 
-resource "aws_iam_role" "terraform_codebuild_role" {
-  name = "${var.stack_name}-TestApply"
+resource "aws_iam_role" "build_role" {
+  name = "${var.stack_name}_BuildRole"
 
   assume_role_policy = <<EOF
 {
@@ -19,10 +19,10 @@ EOF
 }
 
 
-resource "aws_iam_policy" "terraform_codebuild_policy" {
-  name        = "${var.stack_name}-TestApply"
+resource "aws_iam_policy" "build_stage_policy" {
+  name        = "${var.stack_name}_BuildStage_Policy"
   path        = "/service-role/"
-  description = "Policies needed by the CodeBuild project for TestApply the ${var.stack_name} stack"
+  description = "Policies needed by the build stage CodeBuild project for the ${var.stack_name} stack"
 
   policy = <<POLICY
 {
@@ -57,15 +57,9 @@ POLICY
 }
 
 
-resource "aws_iam_policy_attachment" "terraform_codebuild_attachment" {
-  name       = "${var.stack_name}-TestApply"
-  policy_arn = "${aws_iam_policy.terraform_codebuild_policy.arn}"
-  roles      = ["${aws_iam_role.terraform_codebuild_role.id}"]
-}
-
-
-resource "aws_iam_role_policy_attachment" "terraform_terraform_attachment" {
-  policy_arn = "arn:aws:iam::aws:policy/PowerUserAccess"
-  role      = "${aws_iam_role.terraform_codebuild_role.id}"
+resource "aws_iam_policy_attachment" "attach_build_stage_policy_to_build_role" {
+  name       = "${var.stack_name}-BuildStage-PolicyAttachment"
+  policy_arn = "${aws_iam_policy.build_stage_policy.arn}"
+  roles      = ["${aws_iam_role.build_role.id}"]
 }
 

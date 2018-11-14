@@ -1,6 +1,6 @@
 
-resource "aws_iam_role" "packaging_codebuild_role" {
-  name = "${var.stack_name}_Packager"
+resource "aws_iam_role" "apply_role" {
+  name = "${var.stack_name}-ApplyRole"
 
   assume_role_policy = <<EOF
 {
@@ -19,10 +19,10 @@ EOF
 }
 
 
-resource "aws_iam_policy" "packaging_codebuild_policy" {
-  name        = "${var.stack_name}_Packaging_Codebuild_Policy"
+resource "aws_iam_policy" "apply_policy" {
+  name        = "${var.stack_name}-ApplyPolicy"
   path        = "/service-role/"
-  description = "Policies needed by the CodeBuild project for packaging the ${var.stack_name} stack"
+  description = "Policies for applying changes to instances of ${var.stack_name}"
 
   policy = <<POLICY
 {
@@ -57,9 +57,15 @@ POLICY
 }
 
 
-resource "aws_iam_policy_attachment" "packaging_codebuild_attachment" {
-  name       = "${var.stack_name}_Packaging_Codebuild_Attachment"
-  policy_arn = "${aws_iam_policy.packaging_codebuild_policy.arn}"
-  roles      = ["${aws_iam_role.packaging_codebuild_role.id}"]
+resource "aws_iam_policy_attachment" "attach_ApplyPolicy_to_ApplyRole" {
+  name       = "${var.stack_name}-ApplyStage-PolicyAttachment"
+  policy_arn = "${aws_iam_policy.apply_policy.arn}"
+  roles      = ["${aws_iam_role.apply_role.id}"]
+}
+
+
+resource "aws_iam_role_policy_attachment" "attach_PowerUserPolicy_to_ApplyRole" {
+  policy_arn = "arn:aws:iam::aws:policy/PowerUserAccess"
+  role      = "${aws_iam_role.apply_role.id}"
 }
 
