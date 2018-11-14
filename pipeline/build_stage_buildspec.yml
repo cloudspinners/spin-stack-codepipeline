@@ -13,6 +13,8 @@ phases:
 
   pre_build:
     commands:
+      - apt-get install -y tree
+      - tree .
       - bundle update
 
   build:
