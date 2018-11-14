@@ -18,7 +18,7 @@ resource "aws_codebuild_project" "emphemeral-test-stage" {
 
   source {
     type = "CODEPIPELINE"
-    buildspec = "ephemeral_test_stage_buildspec.yml"
+    buildspec = "pipeline/ephemeral_test_stage_buildspec.yml"
   }
 
   artifacts {

@@ -18,7 +18,7 @@ resource "aws_codebuild_project" "apply-stage" {
 
   source {
     type = "CODEPIPELINE"
-    buildspec = "apply_stage_buildspec.yml"
+    buildspec = "pipeline/apply_stage_buildspec.yml"
   }
 
   artifacts {
