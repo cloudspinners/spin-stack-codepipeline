@@ -6,6 +6,13 @@ resource "aws_s3_bucket" "artefact_repository" {
     enabled = "true"
   }
   tags {
-    Name      = "artefact_repository"
+    Name                = "artefact_repository"
+    InstanceIdentifier  = "${var.instance_identifier}"
   }
+}
+
+resource "aws_ssm_parameter" "artefact_repository_reference" {
+  name  = "/${var.instance_identifier}/${var.stack_name}/repo_bucket_name"
+  type  = "String"
+  value = "${var.repo_bucket_name}"
 }

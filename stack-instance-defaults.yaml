@@ -7,3 +7,4 @@ parameters:
   github_repo: spin-stack-codepipeline
   github_branch: master
   repo_bucket_name: _OVERRIDE_THIS_
+  instance_identifier: _OVERRIDE_THIS_
