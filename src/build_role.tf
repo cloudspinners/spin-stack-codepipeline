@@ -1,4 +1,3 @@
-
 resource "aws_iam_role" "build_role" {
   name = "${var.stack_name}_BuildRole"
 
@@ -16,12 +15,12 @@ resource "aws_iam_role" "build_role" {
   ]
 }
 EOF
+
 }
 
-
 resource "aws_iam_policy" "build_stage_policy" {
-  name        = "${var.stack_name}_BuildStage_Policy"
-  path        = "/service-role/"
+  name = "${var.stack_name}_BuildStage_Policy"
+  path = "/service-role/"
   description = "Policies needed by the build stage CodeBuild project for the ${var.stack_name} stack"
 
   policy = <<POLICY
@@ -54,12 +53,12 @@ resource "aws_iam_policy" "build_stage_policy" {
   ]
 }
 POLICY
+
 }
 
-
 resource "aws_iam_policy_attachment" "attach_build_stage_policy_to_build_role" {
-  name       = "${var.stack_name}-BuildStage-PolicyAttachment"
-  policy_arn = "${aws_iam_policy.build_stage_policy.arn}"
-  roles      = ["${aws_iam_role.build_role.id}"]
+name       = "${var.stack_name}-BuildStage-PolicyAttachment"
+policy_arn = aws_iam_policy.build_stage_policy.arn
+roles      = [aws_iam_role.build_role.id]
 }
 

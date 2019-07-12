@@ -1,4 +1,3 @@
-
 resource "aws_iam_role" "apply_role" {
   name = "${var.stack_name}-ApplyRole"
 
@@ -16,12 +15,12 @@ resource "aws_iam_role" "apply_role" {
   ]
 }
 EOF
+
 }
 
-
 resource "aws_iam_policy" "apply_policy" {
-  name        = "${var.stack_name}-ApplyPolicy"
-  path        = "/service-role/"
+  name = "${var.stack_name}-ApplyPolicy"
+  path = "/service-role/"
   description = "Policies for applying changes to instances of ${var.stack_name}"
 
   policy = <<POLICY
@@ -54,18 +53,17 @@ resource "aws_iam_policy" "apply_policy" {
   ]
 }
 POLICY
-}
 
+}
 
 resource "aws_iam_policy_attachment" "attach_ApplyPolicy_to_ApplyRole" {
-  name       = "${var.stack_name}-ApplyStage-PolicyAttachment"
-  policy_arn = "${aws_iam_policy.apply_policy.arn}"
-  roles      = ["${aws_iam_role.apply_role.id}"]
+name       = "${var.stack_name}-ApplyStage-PolicyAttachment"
+policy_arn = aws_iam_policy.apply_policy.arn
+roles      = [aws_iam_role.apply_role.id]
 }
 
-
 resource "aws_iam_role_policy_attachment" "attach_PowerUserPolicy_to_ApplyRole" {
-  policy_arn = "arn:aws:iam::aws:policy/PowerUserAccess"
-  role      = "${aws_iam_role.apply_role.id}"
+policy_arn = "arn:aws:iam::aws:policy/PowerUserAccess"
+role       = aws_iam_role.apply_role.id
 }
 
